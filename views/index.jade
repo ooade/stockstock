@@ -1,5 +1,13 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .navbar.navbar-static-top.navbar-inverse 
+    .navbar-brand #{title}
+  
+  .container-fluid
+    form(action='', method='POST')
+      .form-group
+        label Add Stock
+        input(type='text', placeholder='Enter Stock / Stocks Separated with a comma(,)').form-control
+      .form-group
+        button.btn.btn-primary Add New
