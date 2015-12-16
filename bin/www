@@ -17,13 +17,21 @@ app.set('port', port);
 
 /**
  * Create HTTP server.
+ * Connect Sockets.io to server.
  */
 
 var server = http.createServer(app);
+var io = require('socket.io')(server);
 
 /**
+ * Listen to events on Sockets.
  * Listen on provided port, on all network interfaces.
  */
+io.on('connection', function (socket) {
+  socket.on('stock', function (msg) {
+    io.emit('stock message', msg);
+  });
+});
 
 server.listen(port);
 server.on('error', onError);

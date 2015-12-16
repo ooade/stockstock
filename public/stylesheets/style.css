@@ -19,5 +19,13 @@ a {
 .navbar-inverse{
   background-color: rgb(20, 114, 209) !important;
   border-bottom: 3px solid rgb(217, 197, 44);
- 
+}
+.btn-primary{
+  background-color: rgb(20, 114, 209) !important;
+  border: 1px solid rgb(20, 114, 209) !important;
+  margin-top:-10px;
+  border:none;
+}
+label small{
+  color:rgb(217, 197, 44);
 }

@@ -4,10 +4,45 @@ block content
   .navbar.navbar-static-top.navbar-inverse 
     .navbar-brand #{title}
   
-  .container-fluid
-    form(action='', method='POST')
+  .container-fluid(ng-controller='stockAll')
+    form(method='POST', ng-submit='send()')
       .form-group
-        label Add Stock
-        input(type='text', placeholder='Enter Stock / Stocks Separated with a comma(,)').form-control
+        label Syncs in realtime
+        input(type='text', placeholder='Enter Stock', ng-model='stock').form-control
       .form-group
         button.btn.btn-primary Add New
+    .breadcrumb(ng-repeat='steam in stocks') {{steam.dataset}}
+  #bar-chart
+block footnote
+  script.
+    var chartdata = [140, 60, 80, 100, 70, 120, 100, 60, 70, 150, 120, 140,
+                    140, 120, 150, 70, 60, 100, 120, 70, 100, 80, 60, 40];
+    
+    var height = 200,
+        width = 720,
+        barWidth = 40,
+        barOffset = 20;
+    
+    var yScale = d3.scale.linear()
+            .domain([0, d3.max(chartdata)])
+            .range([0, height])
+    
+    var xScale = d3.scale.ordinal()
+            .domain(d3.range(0, chartdata.length))
+            .rangeBands([0, width])
+    
+    d3.select('#bar-chart').append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .transition()
+      .style("background-color", "black")
+      .selectAll("circle").transition()
+      .duration(750)
+      .delay(function(d, i) { return i * 10; })
+      .attr("r", function(d) { return Math.sqrt(d * scale); });
+  script(type='text/javascript', src='/jquery/jquery.min.js')
+  script(type='text/javascript', src='/angular/angular.min.js')
+  script(type='text/javascript', src='/angular/angular-route.min.js')
+  script(type='text/javascript', src='/angular/angular-resource.min.js')
+  script(type='text/javascript', src='/socket.io/socket.io.js')
+  script(type='text/javascript', src='/javascripts/index.js')
