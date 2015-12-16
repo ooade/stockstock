@@ -5,15 +5,19 @@ var router = express.Router();
 var stock = require('../controllers/stock.controller');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('index', { title: 'StockStock' });
 });
 
-router.post('/api/data', function(req, res, next) {
+router.post('/api/data', function (req, res, next) {
   stock.addStock(req, res);
 });
 
-router.get('/api/data', function(req, res, next) {
+router.delete('/api/data/:code', function (req, res, next) {
+  stock.deleteStock(req, res);
+});
+
+router.get('/api/data', function (req, res, next) {
   stock.retrieveStock(req, res);
 });
 

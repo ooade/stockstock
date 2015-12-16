@@ -11,6 +11,14 @@ block content
         input(type='text', placeholder='Enter Stock', ng-model='stock', style="text-transform:uppercase").form-control
       .form-group
         button.btn.btn-primary Add New
+    .breadcrumb
+      .divider
+        span(ng-repeat='stock in stocks') 
+          button.btn 
+            span(ng-bind='stock.code')
+            a(ng-click='removeStock(stock.code)').btn
+              .glyphicon.glyphicon-remove 
+              
     #container
 block footnote
   script(type='text/javascript', src='/jquery/jquery.min.js')

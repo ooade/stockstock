@@ -22,20 +22,26 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                 });
         };
 
+        $scope.invokeData = function () {
+            $scope.getScopes(function (info) {
+                angular.forEach(info, function (data) {
+                    $scope.grabData(data.name);
+                });
+            });
+        }
+
         socket.on('stock message', function (msg) {
             if (msg !== "") {
-                $scope.getScopes(function (info) {
-                    angular.forEach(info, function (data) {
-                        $scope.grabData(data.name);
-                    });
-                });
+                $scope.invokeData();
             }
         });
-        $scope.getScopes(function (info) {
-            angular.forEach(info, function (data) {
-                $scope.grabData(data.name);
-            });
+
+        socket.on('delete message', function (msg) {
+            $scope.invokeData();
         });
+
+        $scope.invokeData();
+
         $scope.grabData = function (data) {
             $http.get('https://www.quandl.com/api/v3/datasets/WIKI/' + data + '.json?order=desc&limit=150&api_key=rA5Xa_eYpcFJk5Lv3BUx')
                 .success(function (data) {
@@ -58,8 +64,20 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                 });
         };
 
+        $scope.removeStock = function (code) {
+            $http.delete('api/data/' + code)
+                .success(function () {
+                    angular.forEach($scope.stocks, function (x, i) {
+                        if (x.code === code) {
+                            $scope.stocks.splice(i, 1);
+                        }
+                    });
+                    socket.emit('delete', "deleted data");
+                });
+        };
+
         $scope.chart = function () {
-            var colors = ['#FF530D', '#E82C0C', '#FF0000', '#E80C7A', '#E80C7A'];
+            var colors = ['#4a2b0f', '#E82C0C', '#FF0000', '#E80C7A', '#E80C7A'];
             $('#container').highcharts({
                 plotOptions: {
                     line: {
@@ -73,12 +91,13 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                     }
                 },
                 chart: {
-                    type: 'line'
+                    type: 'line',
+                    colors: colors
                 },
                 colors: colors,
                 series: $scope.stocks,
                 title: {
-                    text: 'Real Time Stock Market Data'
+                    text: ''
                 },
                 xAxis: { tickLength: 0, labels: { enabled: !1 } },
                 yAxis: {
@@ -87,4 +106,7 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                 credits: { enabled: !1 }
             });
         };
+        if ($('#container').text() === '') {
+            $('#container').html('<center><img src="/images/ajax-loader.gif"/><br/>Loading Chart...</center>');
+        }
     }]);

@@ -22,9 +22,19 @@ exports.addStock = function (req, res) {
 
 exports.retrieveStock = function (req, res) {
 	Stock.find({}, function (err, stock) {
-		if (err) throw err;
+		if (err) { throw err; }
 		if (stock) {
 			res.json(stock);
 		}
+	})
+};
+
+exports.deleteStock = function (req, res) {
+	Stock.findOne({ 'name': req.params.code }, function (err, stock) {
+		if (err) { throw err; }
+		stock.remove(function (err) {
+			if (err) { throw err; }
+			res.end();
+		});
 	})
 };
