@@ -18,7 +18,7 @@ a {
 }
 .navbar-inverse{
   background-color: rgb(20, 114, 209) !important;
-  border-bottom: 3px solid rgb(217, 197, 44);
+  border-bottom: 1px solid rgb(20, 114, 209) !important;
 }
 .btn-primary{
   background-color: rgb(20, 114, 209) !important;
