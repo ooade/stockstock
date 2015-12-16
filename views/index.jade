@@ -2,15 +2,17 @@ extends layout
 
 block content
   .navbar.navbar-static-top.navbar-inverse 
-    .navbar-brand #{title}
+    .navbar-brand 
+     span.glyphicon.glyphicon-cloud(style='vertical-align:middle')
+     span  #{title}
   
   .container-fluid(ng-controller='stockAll')
     form(method='POST', ng-submit='send()')
       .form-group
-        label Syncs in realtime
         input(type='text', placeholder='Enter Stock', ng-model='stock', style="text-transform:uppercase").form-control
       .form-group
-        button.btn.btn-primary Add New
+        button.btn.btn-primary 
+          b Add New
     .breadcrumb
       .divider
         span(ng-repeat='stock in stocks') 
