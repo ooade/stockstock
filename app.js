@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -26,7 +25,6 @@ app.use('/angular', express.static(path.join(__dirname, 'bower_components/angula
 app.use('/jquery', express.static(path.join(__dirname, 'bower_components/jquery')));
 
 app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

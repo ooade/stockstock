@@ -14,16 +14,49 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
     .controller('stockAll', ['$scope', '$window', '$http', function ($scope, $window, $http) {
         var socket = io();
 
-        $scope.stocks = [];
+        $scope.getScopes = function (callback) {
+            $http.get('api/data')
+                .success(function (data) {
+                    $scope.stocks = [];
+                    callback(data);
+                });
+        };
 
         socket.on('stock message', function (msg) {
             if (msg !== "") {
-                $scope.stocks.push(msg);
-                console.log(msg);
-                $scope.$apply();
-                $scope.chart();
+                $scope.getScopes(function (info) {
+                    angular.forEach(info, function (data) {
+                        $scope.grabData(data.name);
+                    });
+                });
             }
         });
+        $scope.getScopes(function (info) {
+            angular.forEach(info, function (data) {
+                $scope.grabData(data.name);
+            });
+        });
+        $scope.grabData = function (data) {
+            $http.get('https://www.quandl.com/api/v3/datasets/WIKI/' + data + '.json?order=desc&limit=150&api_key=rA5Xa_eYpcFJk5Lv3BUx')
+                .success(function (data) {
+                    $scope.stockdata = {
+                        'name': data.dataset.name,
+                        'data': data.dataset.data,
+                        'code': data.dataset.dataset_code
+                    };
+                    $scope.stocks.push($scope.stockdata);
+                    $scope.chart();
+                });
+        };
+
+        $scope.send = function () {
+            $scope.stocks = [];
+            $http.post('/api/data', { 'name': $scope.stock })
+                .success(function (data) {
+                    socket.emit('stock', $scope.stock);
+                    $scope.stock = '';
+                });
+        };
 
         $scope.chart = function () {
             var colors = ['#FF530D', '#E82C0C', '#FF0000', '#E80C7A', '#E80C7A'];
@@ -53,18 +86,5 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                 },
                 credits: { enabled: !1 }
             });
-        };
-
-        $scope.send = function () {
-            $http.get('https://www.quandl.com/api/v3/datasets/WIKI/' + $scope.stock + '.json?order=desc&limit=150&api_key=rA5Xa_eYpcFJk5Lv3BUx')
-                .success(function (data) {
-                    var stock = {
-                        name: data.dataset.name,
-                        data: data.dataset.data,
-                        code: data.dataset.dataset_code
-                    };
-                    socket.emit('stock', stock);
-                });
-            $scope.stock = '';
         };
     }]);

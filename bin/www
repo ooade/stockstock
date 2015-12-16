@@ -7,6 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('stockstock:server');
 var http = require('http');
+var mongoose = require('mongoose');
+
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/stockstock');
 
 /**
  * Get port from environment and store in Express.

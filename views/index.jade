@@ -8,10 +8,9 @@ block content
     form(method='POST', ng-submit='send()')
       .form-group
         label Syncs in realtime
-        input(type='text', placeholder='Enter Stock', ng-model='stock').form-control
+        input(type='text', placeholder='Enter Stock', ng-model='stock', style="text-transform:uppercase").form-control
       .form-group
         button.btn.btn-primary Add New
-    // .breadcrumb(ng-repeat='steam in stocks') {{steam.name}}
     #container
 block footnote
   script(type='text/javascript', src='/jquery/jquery.min.js')
