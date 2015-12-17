@@ -72,6 +72,10 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                             $scope.stocks.splice(i, 1);
                         }
                     });
+                    if ($scope.stocks.length === 0) {
+                        $('#container').html('<center>No Stocks Available, Add Stock above</center>');
+                        $('.breadcrumb').hide();
+                    }
                     socket.emit('delete', "deleted data");
                 });
         };
