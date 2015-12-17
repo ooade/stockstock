@@ -1,7 +1,7 @@
 var Stock = require('../models/stock');
 
 exports.addStock = function (req, res) {
-	Stock.findOne({ 'name': req.body.name }, function (err, stock) {
+	Stock.findOne({ 'name': req.body.name.toUpperCase() }, function (err, stock) {
 		if (err) throw err;
 		if (stock) {
 			res.json("exist");

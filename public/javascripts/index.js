@@ -52,6 +52,11 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                     };
                     $scope.stocks.push($scope.stockdata);
                     $scope.chart();
+                }).error(function (err) {
+                    if (err.quandl_error.code === 'QECx02') {
+                        $scope.removeStock(data);
+                        console.log("Removed invalid stock: ", data);
+                    }
                 });
         };
 
@@ -73,7 +78,7 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                         }
                     });
                     if ($scope.stocks.length === 0) {
-                        $('#container').html('<center>No Stocks Available, Add Stock above</center>');
+                        $('#container').html('<center>No Stock Data, Add Stock above</center>');
                         $('.breadcrumb').hide();
                     }
                     socket.emit('delete', "deleted data");
@@ -110,6 +115,7 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
                 credits: { enabled: !1 }
             });
         };
+
         if ($('#container').text() === '') {
             $('#container').html('<center><img src="/images/ajax-loader.gif"/><br/>Loading Chart...</center>');
         }
