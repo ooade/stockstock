@@ -64,6 +64,7 @@ angular.module('stockApp', ['ngResource', 'ngRoute'])
             $scope.stocks = [];
             $http.post('/api/data', { 'name': $scope.stock })
                 .success(function (data) {
+                    $('.breadcrumb').show();
                     socket.emit('stock', $scope.stock);
                     $scope.stock = '';
                 });
